@@ -11,28 +11,28 @@ export const changeContent = (seccion, students, courses, payments, users) => {
         main.innerHTML = `
             <div id="students" class="div__container">
                 <div>
-                    <img src="/storage/img/Student_Dashboard.svg">
+                    <img src="../storage/img/Student_Dashboard.svg">
                     <span>Students</span>
                 </div>
                 <strong>${students}</strong>
             </div>
             <div id="course" class="div__container">
                 <div>
-                    <img src="/storage/img/Course_Dashboard.svg">
+                    <img src="../storage/img/Course_Dashboard.svg">
                     <span>Course</span>
                 </div>
                 <strong>${courses}</strong>
             </div>
             <div id="payment" class="div__container">
                 <div>
-                    <img src="/storage/img/Payment_DashBoard.svg">
+                    <img src="../storage/img/Payment_DashBoard.svg">
                     <span>Payments</span>
                 </div>
                 <strong data-format="${payments.format}">${payments.total}</strong>
             </div>
             <div id="user" class="div__container">
                 <div>
-                    <img src="/storage/img/Users_Dashboard.svg">
+                    <img src="../storage/img/Users_Dashboard.svg">
                     <span>Users</span>
                 </div>
                 <strong>${users}</strong>
