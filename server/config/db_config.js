@@ -1,3 +1,4 @@
+
 db.createCollection("materias", {
   validator: {
     $jsonSchema: {
@@ -169,7 +170,7 @@ db.createCollection("pagos", {
           description: "Id del estudiante (referencia a usuarios)"
         },
         monto: {
-          bsonType: "double",
+          bsonType: "int",
           minimum: 10000,
           description: "Monto del pago, mínimo 10.000 para permitir abonos"
         },
@@ -280,16 +281,10 @@ db.createCollection("reportes", {
           bsonType: "array",
           minItems: 1,
           items: {
-            bsonType: "object",
-            required: ["nota_id"],
-            properties: {
-              materia_id: {
-                bsonType: "objectId",
-                description: "Id de la nota (referencia de todas las notas)"
-              }
+            bsonType: "objectId",
+            description: "Id de cada Nota"
             },
             additionalProperties: false
-          }
         },
         promedio: {
           bsonType: "double",
@@ -344,12 +339,12 @@ db.createCollection("reportes_pagos", {
           required: ["monto_esperado", "monto_pagado", "estado"],
           properties: {
             monto_esperado: {
-              bsonType: "double",
+              bsonType: "int",
               minimum: 50000,
               description: "Monto esperado de la matrícula"
             },
             monto_pagado: {
-              bsonType: "double",
+              bsonType: "int",
               minimum: 0,
               description: "Monto pagado de la matrícula"
             },
@@ -374,12 +369,12 @@ db.createCollection("reportes_pagos", {
                 description: "Fecha esperada del pago (primer día del mes)"
               },
               monto_esperado: {
-                bsonType: "double",
+                bsonType: "int",
                 minimum: 50000,
                 description: "Monto esperado de la pensión mensual"
               },
               monto_pagado: {
-                bsonType: "double",
+                bsonType: "int",
                 minimum: 0,
                 description: "Monto pagado de la pensión mensual"
               },
@@ -394,17 +389,17 @@ db.createCollection("reportes_pagos", {
           description: "Pensiones mensuales (12 meses)"
         },
         total_esperado: {
-          bsonType: "double",
+          bsonType: "int",
           minimum: 0,
           description: "Suma de matrícula y pensiones esperadas"
         },
         total_pagado: {
-          bsonType: "double",
+          bsonType: "int",
           minimum: 0,
           description: "Suma de matrícula y pensiones pagadas"
         },
         saldo_pendiente: {
-          bsonType: "double",
+          bsonType: "int",
           minimum: 0,
           description: "Diferencia entre total esperado y pagado"
         },

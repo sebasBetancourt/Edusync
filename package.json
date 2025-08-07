@@ -1,8 +1,9 @@
 {
   "name": "edusync",
   "version": "1.0.0",
+  "type": "module",
   "description": "Sistema para gestionar estudiantes, cursos, pagos y usuarios en una institución educativa.",
-  "main": "server/app.js",
+  "main": "server/data/seed_database.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
