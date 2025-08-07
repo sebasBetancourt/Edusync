@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/sebasBetancourt/simple-board/issues"
   },
-  "homepage": "https://github.com/sebasBetancourt/simple-board#readme"
+  "homepage": "https://github.com/sebasBetancourt/simple-board#readme",
+  "dependencies": {
+    "chalk": "^5.5.0",
+    "dotenv": "^17.2.1",
+    "inquirer": "^12.9.0",
+    "mongodb": "^6.18.0"
+  }
 }
