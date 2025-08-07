@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/styles.css">
-    <script src="./js/main.js" defer type="module"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/595/595759.png" type="image/x-icon">
     <title>Login</title>
 </head>
@@ -17,10 +13,10 @@
             <div class="form">
                 <div class="tittle">
                     <div class="line">
-                    <img src="https://ibb.co/yBKnMHj3" alt="">
+                        <img src="https://i.ibb.co/yBKnMHj3/Line.png" alt="Operations Logo">
                     </div>
                     <div class="name">
-                    <p>CRUD OPERATIONS</p>
+                        <p>OPERATIONS</p>
                     </div>
                 </div>
                 <div class="sign_in">
@@ -30,32 +26,31 @@
                     <p>Enter your credentials to access your account</p>
                 </div>
                 <div class="email_cont">
-                    <form action="post">
+                    <form id="login-form">
                         <div class="text_email">
                             <p>Email</p>
                         </div>
                         <div class="user">
-                            <input class="space" type="email" name="email" id="email" placeholder="Enter your Email">
+                            <input class="space" type="email" name="email" id="email" placeholder="Enter your Email" required>
                         </div>
                         <div class="text_password">
                             <p>Password</p>
                         </div>
                         <div class="password_cont">
-                            <input class="space" type="password" name="password" id="password" placeholder="Enter Your Password">
+                            <input class="space" type="password" name="password" id="password" placeholder="Enter Your Password" required>
                         </div>
                         <div class="button_cont">
-                            <button class="button" type="submit" value="SIGN IN" onclick="window.location.href='views/workspace.html'">SIGN IN</button>
+                            <button class="button" type="submit">SIGN IN</button>
                         </div>
                         <div class="forgot">
                             <p>Forgot your password?</p> <a href="#">Reset password</a>
                         </div>
                     </form>
-                </div>
-
+                    <div id="error-message" style="color: red; text-align: center; display: none;"></div>
                 </div>
             </div>
-
         </section>
     </main>
+    <script src="./js/login.js" defer></script>
 </body>
 </html>

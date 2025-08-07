@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/workspace.css">
-    <script src="../js/dashbord/dashboard.js" defer type="module"></script>
+    <script src="../js/main.js" defer type="module"></script>
     <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/2784/2784403.png" type="image/x-icon">
     <title>Gestion Academica</title>
 </head>
@@ -12,17 +12,17 @@
     <header class="header">
         <div class="return">
             <a href="#">
-                <img src="https://i.ibb.co/nN53r4RB/Arrow.png">
+                <img src="../storage/img/Arrow.svg" alt="Back Arrow">
             </a>
         </div>
         <div class="container_options">
             <div class="search">
                 <input type="text" placeholder="Search...">
-                <img src="../storage/img/search 1.svg" alt="">
+                <img src="../storage/img/search 1.svg" alt="Search Icon">
             </div>
             <div class="noti">
                 <a href="#">
-                    <img src="https://i.ibb.co/kVrbcjqT/Notification.png">
+                    <img src="../storage/img/Notification.svg" alt="Notification Icon">
                 </a>
             </div>
         </div>
@@ -30,49 +30,48 @@
     <nav>
         <div class="container_logo">
             <a href="#">
-                <img src="https://i.ibb.co/XkNb5YCg/Line-Logo.png" alt="">
-                <h1>CRUD OPERATIONS</h1>
+                <img src="https://cdn-icons-png.flaticon.com/512/2784/2784403.png" alt="Edusync Logo">
+                <h1>Edusync</h1>
             </a>
         </div>
         <section class="container_user">
-            <img src="https://i.ibb.co/mr4bWpnT/Profile-Img.png" alt="hola">
-            <h2>Karthi Madesh</h2>
+            <img src="https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/no-profile-picture-icon.png" alt="User Profile">
+            <h2>Ana Gómez</h2>
             <label>Admin</label>
         </section>
         <section class="container_menu">
             <div class="menu_nav" data-section="Home">
-                <img src="../storage/img/Home_menu_nav.svg" alt="">
-                <button onclick="changeContent('Home')">Home</button>
+                <img src="../storage/img/Home_menu_nav.svg" alt="Home Icon">
+                <button data-section="Home">Home</button>
             </div>
-            <div class="menu_nav">
-                <img src="https://i.ibb.co/zWPkWy8p/Course-Menu.png" alt="">
-                <button onclick="changeContent('Course')" data-section="Home">Course</button>
+            <div class="menu_nav" data-section="Course">
+                <img src="../storage/img/Book.svg" alt="Course Icon">
+                <button data-section="Course">Course</button>
             </div>
-            <div class="menu_nav">
-                <img src="https://i.ibb.co/Tqtgz5XN/Students-Menu.png" alt="">
-                <button onclick="changeContent('Students')" data-section="Home">Students</button>
+            <div class="menu_nav" data-section="Students">
+                <img src="../storage/img/Students.svg" alt="Students Icon">
+                <button data-section="Students">Students</button>
             </div>
-            <div class="menu_nav">
-               <img src="https://i.ibb.co/hJgmDtYf/Payment-Menu.png" alt="">
-                <button onclick="changeContent('Payment')" data-section="Home">Payment</button>
+            <div class="menu_nav" data-section="Payment">
+                <img src="../storage/img/Payment.svg" alt="Payment Icon">
+                <button data-section="Payment">Payment</button>
             </div>
-            <div class="menu_nav">
-                <img src="https://i.ibb.co/rf7Wck4b/Report-Menu.png" alt="">
-                <button onclick="changeContent('Report_menu_nav')" data-section="Home">Report</button>
+            <div class="menu_nav" data-section="Report">
+                <img src="../storage/img/Reports.svg" alt="Report Icon">
+                <button data-section="Report">Report</button>
             </div>
-            <div class="menu_nav">
-                <img src="https://i.ibb.co/4gKDZnyq/Settings-Menu.png" alt="">
-                <button onclick="changeContent('Settings')" data-section="Home">Settings</button>
+            <div class="menu_nav" data-section="Settings">
+                <img src="../storage/img/Settings.svg" alt="Settings Icon">
+                <button data-section="Settings">Settings</button>
             </div>
-            <div class="log_out menu_nav">
-                <button onclick="window.location.replace('../index.html')">Logout</button>
-                <img src="https://i.ibb.co/X6jQcNd/Sign-Out-Menu.png" alt="">
+            <div class="menu_nav log_out" data-section="Logout">
+                <img src="https://i.ibb.co/X6jQcNd/Sign-Out-Menu.png" alt="Logout Icon">
+                <button data-section="Logout">Logout</button>
             </div>
         </section>
     </nav>
-
     <main id="content">
-HOLAS
+        <div id="loading" style="display: none;">Cargando...</div>
     </main>
 </body>
 </html>

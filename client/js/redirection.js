@@ -8,36 +8,7 @@ export const changeContent = (seccion, students, courses, payments, users) => {
     let main = document.getElementById("content");
 
     if (seccion === "Home") {
-        main.innerHTML = `
-            <div id="students" class="div__container">
-                <div>
-                    <img src="../storage/img/Student_Dashboard.svg">
-                    <span>Students</span>
-                </div>
-                <strong>${students}</strong>
-            </div>
-            <div id="course" class="div__container">
-                <div>
-                    <img src="../storage/img/Course_Dashboard.svg">
-                    <span>Course</span>
-                </div>
-                <strong>${courses}</strong>
-            </div>
-            <div id="payment" class="div__container">
-                <div>
-                    <img src="../storage/img/Payment_DashBoard.svg">
-                    <span>Payments</span>
-                </div>
-                <strong data-format="${payments.format}">${payments.total}</strong>
-            </div>
-            <div id="user" class="div__container">
-                <div>
-                    <img src="../storage/img/Users_Dashboard.svg">
-                    <span>Users</span>
-                </div>
-                <strong>${users}</strong>
-            </div>
-        `;
+        main.innerHTML = "<h2>Página de Home</h2>";
     } else if (seccion === "Course") {
         main.innerHTML = "<h2>Página de Course</h2>";
     } else if (seccion === "Students") {

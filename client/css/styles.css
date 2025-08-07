@@ -16,12 +16,14 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 175px;
+    padding: 2em;
 }
 
 .form_container{
-    width: 475px;
-    height: 550px;
+    justify-self: center;
+    width: 23em;
+    height: 35em;
+    margin: 4em;
     background-color: var(--color-3);
     border-radius: 15px;
     box-shadow: 4px 4px 4px hsla(0, 0%, 0%, 0.250);
@@ -84,8 +86,8 @@ main{
 }
 
 .user input{
-    width: 415px;
-    height: 44px;
+    width: 27em;
+    height: 3.5em;
     border-radius: 4px;
     font-family:  "Montserrat-Regular";
     font-size: 12px;
@@ -108,8 +110,8 @@ main{
 }
 
 .password_cont input{
-    width: 415px;
-    height: 44px;
+    width: 27em;
+    height: 3.5em;
     border-radius: 4px;
     font-family:  "Montserrat-Regular";
     font-size: 12px;
@@ -129,13 +131,14 @@ main{
 
 .button_cont{
     display: flex;
-    justify-content: center;
+    width: 22em;
+    justify-content:stretch;
     align-items: center;
     padding-top: 30px;
 }
 
 button{
-    width: 415px;
+    width: 22em;
     height: 44px;
     background-color: var(--color-2);
     font-family: "Montserrat-Medium";
