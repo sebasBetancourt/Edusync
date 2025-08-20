@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/* :target {
+  animation: anchor-in 500ms ease-out;
+}
+
+@keyframes anchor-in {
+  from { transform: translateY(12px); opacity: 0.001; }
+  to   { transform: translateY(0);     opacity: 1;     }
+} */
+
+/* Scrollbar general */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Fondo de la barra */
+::-webkit-scrollbar-track {
+  background: #111; /* Negro corporativo */
+}
+
+/* Pulgar de la barra */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #eab308, #facc15); /* Dorado corporativo */
+  border-radius: 20px;
+  border: 2px solid #111; /* Separación elegante */
+}
+
+/* Hover del pulgar */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #facc15, #eab308); /* Invertir el degradado */
+}
