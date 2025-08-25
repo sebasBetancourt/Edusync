@@ -1,167 +1,243 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { smoothScrollTo } from './SmoothScrollTo';
+import { useState } from 'react'
+import { Button } from './ui/button'
+import { Avatar } from './ui/avatar'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { Badge } from './ui/badge'
+import { Separator } from './ui/separator'
+import { Breadcrumbs } from './Breadcrumbs'
+import { 
+  ChevronLeft,
+  Sun,
+  Moon,
+  User,
+  Settings,
+  LogOut,
+  Bell,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  X
+} from 'lucide-react'
+import { useApp } from './AppContext'
 
-const cn = (...args) => args.filter(Boolean).join(" ");
+const mockNotifications = [
+  {
+    id: 1,
+    type: 'warning',
+    title: 'Pago Vencido',
+    message: 'Cliente María García tiene un pago vencido por $250,000 COP',
+    time: '5 min',
+    read: false
+  },
+  {
+    id: 2,
+    type: 'info',
+    title: 'Nuevo Cliente Registrado',
+    message: 'Se ha registrado un nuevo cliente: Carlos Ruiz',
+    time: '1 hora',
+    read: false
+  },
+  {
+    id: 3,
+    type: 'success',
+    title: 'Pago Recibido',
+    message: 'Pago de $500,000 COP procesado exitosamente',
+    time: '2 horas',
+    read: true
+  },
+  {
+    id: 4,
+    type: 'warning',
+    title: 'Próximo Vencimiento',
+    message: '15 pagos vencen en los próximos 3 días',
+    time: '4 horas',
+    read: true
+  }
+]
 
-const Logo = ({ src, alt = "Logo", href = "#" }) => (
-    <a href={href} className="inline-flex items-center gap-2">
-        {src ? (
-            <img src={src} alt={alt} className="h-20 w-auto" />
-        ) : (
-            <div className="h-8 w-8 rounded-lg bg-yellow-400" aria-hidden />
-        )}
-    </a>
-);
+export function Header() {
+  const { darkMode, toggleDarkMode, sidebarCollapsed, toggleSidebar, user, setActiveSection } = useApp()
+  const [notifications, setNotifications] = useState(mockNotifications)
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
 
-const NavLink = ({ href, children }) => (
-    <a
-        href={href}
-        className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:underline underline-offset-4 decoration-2 decoration-yellow-400"
-    >
-        {children}
-    </a>
-);
+  const unreadCount = notifications.filter(n => !n.read).length
 
-const CTAButton = ({ label, href, onClick }) => (
-    <a
-        href={href || "#"}
-        onClick={onClick}
-        className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-gray-900 bg-yellow-400 hover:bg-yellow-300 shadow-sm transition"
-    >
-        {label}
-    </a>
-);
+  const markAsRead = (id) => {
+    setNotifications(notifications.map(n => 
+      n.id === id ? { ...n, read: true } : n
+    ))
+  }
 
-const MobileMenuButton = ({ open, toggle }) => (
-    <button
-        onClick={toggle}
-        className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 lg:hidden"
-        aria-label="Toggle menu"
-        aria-expanded={open}
-    >
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="h-5 w-5"
+  const markAllAsRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, read: true })))
+  }
+
+  const getNotificationIcon = (type) => {
+    switch (type) {
+      case 'warning':
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />
+      case 'success':
+        return <CheckCircle className="w-4 h-4 text-green-500" />
+      case 'info':
+        return <Clock className="w-4 h-4 text-blue-500" />
+      default:
+        return <Bell className="w-4 h-4 text-muted-foreground" />
+    }
+  }
+
+  return (
+    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-40">
+      {/* Top Header Row */}
+      <div className="flex h-16 items-center px-4 gap-4">
+        {/* Sidebar Toggle */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={toggleSidebar}
+          className="flex-shrink-0"
         >
-            {open ? (
-                <path
-                    fillRule="evenodd"
-                    d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 11-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
-                    clipRule="evenodd"
-                />
-            ) : (
-                <path
-                    fillRule="evenodd"
-                    d="M3.75 5.25a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75zm0 6a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75zm0 6a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75z"
-                    clipRule="evenodd"
-                />
-            )}
-        </svg>
-    </button>
-);
+          <ChevronLeft 
+            className={`w-4 h-4 transition-transform duration-200 ${
+              sidebarCollapsed ? 'rotate-180' : ''
+            }`} 
+          />
+        </Button>
 
-export default function Header({
-    logo,
-    navItems = [
-        { label: "Características", href: "#features" },
-        { label: "Precios", href: "#pricing" },
-        { label: "Testimonios", href: "#testimonials" },
-        { label: "Contacto", href: "#contact" },
-    ],
-    cta = { label: "Comenzar" },
-    height = 72,
-    compactHeight = 60,
-    transparentUntilScroll = false,
-    className,
-    accent = "yellow",
-}) {
-    const [scrolled, setScrolled] = useState(false);
-    const [open, setOpen] = useState(false);
+        {/* Spacer */}
+        <div className="flex-1" />
 
-    useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 8);
-        onScroll();
-        window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
-    }, []);
+        {/* Right side items */}
+        <div className="flex items-center gap-3">
+          {/* Dark Mode Toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleDarkMode}
+            className="relative"
+          >
+            <Sun className={`w-4 h-4 transition-all ${darkMode ? 'scale-0 opacity-0' : 'scale-100 opacity-100'} text-yellow-500`} />
+            <Moon className={`w-4 h-4 absolute transition-all ${darkMode ? 'scale-100 opacity-100' : 'scale-0 opacity-0'} text-blue-500`} />
+          </Button>
 
-    const resolvedHeight = scrolled ? compactHeight : height;
-
-    const accentBorder = useMemo(
-        () => `border-b-2 border-${accent}-400`,
-        [accent]
-    );
-
-    return (
-        <header
-            className={cn(
-                "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-                scrolled
-                    ? cn(
-                        "bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/80 shadow-sm"
-                    )
-                    : transparentUntilScroll
-                        ? "bg-transparent"
-                        : "bg-white",
-                className
-            )}
-            style={{ height: resolvedHeight }}
-        >
-            <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-                <Logo {...logo} />
-
-                {/* Desktop nav */}
-                <nav className="hidden lg:flex items-center gap-1">
-      {navItems.map((item) => (
-        <button
-          key={item.href}
-          onClick={(e) => {
-            e.preventDefault();
-            smoothScrollTo(item.href); // Ej: "#why_zono"
-          }}
-          className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:underline underline-offset-4 decoration-2 decoration-yellow-400 cursor-pointer"
-        >
-          {item.label}
-        </button>
-      ))}
-    </nav>
-
-                <div className="hidden lg:flex items-center gap-3">
-                    {cta?.label && <CTAButton {...cta} />}
-                </div>
-
-                <MobileMenuButton open={open} toggle={() => setOpen((v) => !v)} />
-            </div>
-
-            {/* Mobile drawer */}
-            <div
-                className={cn(
-                    "lg:hidden origin-top overflow-hidden border-t border-gray-200 bg-white transition-all duration-300",
-                    open ? "max-h-96" : "max-h-0"
+          {/* Notifications */}
+          <Popover open={notificationsOpen} onOpenChange={setNotificationsOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="sm" className="relative">
+                <Bell className="w-4 h-4" />
+                {unreadCount > 0 && (
+                  <Badge 
+                    variant="destructive" 
+                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center text-xs p-0"
+                  >
+                    {unreadCount}
+                  </Badge>
                 )}
-            >
-                <div className="px-4 pb-4 pt-2">
-                    <div className="flex flex-col">
-                        {navItems.map((item) => (
-                            <a
-                                key={item.href}
-                                href={item.href}
-                                onClick={() => setOpen(false)}
-                                className="py-2 text-base font-medium text-gray-800 hover:text-gray-900"
-                            >
-                                {item.label}
-                            </a>
-                        ))}
-                    </div>
-                    {cta?.label && (
-                        <div className="mt-3">
-                            <CTAButton {...cta} />
-                        </div>
-                    )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-0" align="end" sideOffset={5}>
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-medium">Notificaciones</h4>
+                  {unreadCount > 0 && (
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={markAllAsRead}
+                      className="text-xs h-auto p-1"
+                    >
+                      Marcar todas como leídas
+                    </Button>
+                  )}
                 </div>
-            </div>
-        </header>
-    );
+                
+                <div className="space-y-2 max-h-80 overflow-y-auto">
+                  {notifications.map((notification) => (
+                    <div 
+                      key={notification.id}
+                      className={`p-3 rounded-lg border transition-colors cursor-pointer ${
+                        notification.read 
+                          ? 'bg-muted/30 border-muted' 
+                          : 'bg-background border-border hover:bg-muted/50'
+                      }`}
+                      onClick={() => markAsRead(notification.id)}
+                    >
+                      <div className="flex items-start gap-3">
+                        {getNotificationIcon(notification.type)}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm">{notification.title}</p>
+                          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                            {notification.message}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-2">{notification.time}</p>
+                        </div>
+                        {!notification.read && (
+                          <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1" />
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {notifications.length === 0 && (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No hay notificaciones</p>
+                  </div>
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          {/* User Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="flex items-center gap-2 px-2 h-auto py-2">
+                <Avatar className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
+                  <span className="text-sm font-medium">{user.avatar}</span>
+                </Avatar>
+                <div className="hidden md:block text-left">
+                  <p className="text-sm font-medium">{user.name}</p>
+                  <p className="text-xs text-muted-foreground">{user.role}</p>
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56" sideOffset={5}>
+              <div className="flex items-center gap-3 p-3">
+                <Avatar className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
+                  <span className="font-medium">{user.avatar}</span>
+                </Avatar>
+                <div>
+                  <p className="font-medium">{user.name}</p>
+                  <p className="text-sm text-muted-foreground">{user.email}</p>
+                  <Badge variant="secondary" className="text-xs mt-1">
+                    {user.role}
+                  </Badge>
+                </div>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setActiveSection('profile')}>
+                <User className="w-4 h-4 mr-2" />
+                Perfil
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setActiveSection('settings')}>
+                <Settings className="w-4 h-4 mr-2" />
+                Configuración
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-destructive">
+                <LogOut className="w-4 h-4 mr-2" />
+                Salir
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      {/* Breadcrumbs Row */}
+      <div className="border-t px-4 py-2 bg-muted/30">
+        <Breadcrumbs />
+      </div>
+    </header>
+  )
 }
