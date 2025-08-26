@@ -5,79 +5,102 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Select } from './ui/select'
 import { Badge } from './ui/badge'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
 import { DataTable } from './DataTable'
+import { useApp } from './AppContext'
 import { 
   Plus, 
-  DollarSign, 
-  Calendar,
-  Eye,
-  Edit,
+  Receipt,
+  DollarSign,
+  Clock,
   CheckCircle,
   AlertTriangle,
-  Clock
+  TrendingUp,
+  Calendar,
+  Phone,
+  Mail
 } from 'lucide-react'
-import { useApp } from './AppContext'
 
+// Mock data for payments
 const mockPayments = [
   {
-    id: 'PAY-001',
-    loanId: 'CR-001',
-    clientName: 'Juan Carlos Pérez',
-    amount: 4583333,
-    paymentDate: '2024-07-30',
-    dueDate: '2024-07-25',
+    id: 'PAG-001',
+    loanId: 'PR-001',
+    clientName: 'María García',
+    amount: 450000,
+    dueDate: '2024-04-15',
+    paymentDate: '2024-04-14',
     status: 'Pagado',
-    paymentMethod: 'Transferencia',
-    reference: 'TRF-789456',
-    type: 'Cuota',
-    lateDays: 5,
-    penalty: 45833
-  },
-  {
-    id: 'PAY-002',
-    loanId: 'CR-002',
-    clientName: 'María Elena García',
-    amount: 1282051,
-    paymentDate: null,
-    dueDate: '2024-07-15',
-    status: 'Vencido',
-    paymentMethod: null,
-    reference: null,
-    type: 'Cuota',
-    lateDays: 15,
-    penalty: 128205
-  },
-  {
-    id: 'PAY-003',
-    loanId: 'CR-003',
-    clientName: 'Carlos Roberto López',
-    amount: 4130435,
-    paymentDate: '2024-07-28',
-    dueDate: '2024-07-28',
-    status: 'Pagado',
-    paymentMethod: 'Efectivo',
-    reference: 'EFE-123789',
-    type: 'Cuota',
+    method: 'Transferencia',
     lateDays: 0,
-    penalty: 0
+    interestAmount: 12500,
+    principalAmount: 437500,
+    reference: 'TXN123456789'
+  },
+  {
+    id: 'PAG-002',
+    loanId: 'PR-002',
+    clientName: 'Carlos Rodríguez',
+    amount: 410000,
+    dueDate: '2024-03-20',
+    paymentDate: null,
+    status: 'Vencido',
+    method: null,
+    lateDays: 26,
+    interestAmount: 15000,
+    principalAmount: 395000,
+    reference: null
+  },
+  {
+    id: 'PAG-003',
+    loanId: 'PR-003',
+    clientName: 'Ana Martínez',
+    amount: 520000,
+    dueDate: '2024-04-10',
+    paymentDate: null,
+    status: 'Pendiente',
+    method: null,
+    lateDays: 0,
+    interestAmount: 18200,
+    principalAmount: 501800,
+    reference: null
+  },
+  {
+    id: 'PAG-004',
+    loanId: 'PR-001',
+    clientName: 'María García',
+    amount: 450000,
+    dueDate: '2024-05-15',
+    paymentDate: null,
+    status: 'Programado',
+    method: null,
+    lateDays: 0,
+    interestAmount: 12500,
+    principalAmount: 437500,
+    reference: null
+  },
+  {
+    id: 'PAG-005',
+    loanId: 'PR-004',
+    clientName: 'Luis Fernández',
+    amount: 380000,
+    dueDate: '2024-04-18',
+    paymentDate: null,
+    status: 'Retraso',
+    method: null,
+    lateDays: 5,
+    interestAmount: 22000,
+    principalAmount: 358000,
+    reference: null
   }
 ]
 
-const mockClients = [
-  { id: 'CLI-001', name: 'Juan Carlos Pérez', email: 'juan.perez@email.com' },
-  { id: 'CLI-002', name: 'María Elena García', email: 'maria.garcia@email.com' },
-  { id: 'CLI-003', name: 'Carlos Roberto López', email: 'carlos.lopez@email.com' },
-  { id: 'CLI-004', name: 'Ana Sofía Martínez', email: 'ana.martinez@email.com' },
-  { id: 'CLI-005', name: 'Luis Fernando Torres', email: 'luis.torres@email.com' }
-]
-
 export function PaymentsManagement() {
-  const [isNewPaymentDialogOpen, setIsNewPaymentDialogOpen] = useState(false)
-  const [selectedPayment, setSelectedPayment] = useState<any>(null)
+  const [showPaymentForm, setShowPaymentForm] = useState(false)
+  const [selectedPayment, setSelectedPayment] = useState(null)
+  const [showCollectionModal, setShowCollectionModal] = useState(false)
   const { currency } = useApp()
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount) => {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
       currency: currency,
@@ -86,26 +109,31 @@ export function PaymentsManagement() {
     }).format(amount)
   }
 
-  const getStatusBadge = (status: string) => {
-    const variants = {
-      'Pagado': 'default',
-      'Pendiente': 'secondary',
-      'Vencido': 'destructive',
-      'Parcial': 'destructive'
+  const getStatusBadge = (status) => {
+    const colors = {
+      'Pagado': 'bg-green-100 text-green-800 border-green-200',
+      'Vencido': 'bg-red-100 text-red-800 border-red-200',
+      'Pendiente': 'bg-blue-100 text-blue-800 border-blue-200',
+      'Programado': 'bg-gray-100 text-gray-800 border-gray-200',
+      'Retraso': 'bg-yellow-100 text-yellow-800 border-yellow-200'
     }
-    return <Badge variant={variants[status as keyof typeof variants] || 'outline'}>{status}</Badge>
+    return (
+      <Badge variant="outline" className={colors[status]}>
+        {status}
+      </Badge>
+    )
   }
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status) => {
     switch (status) {
       case 'Pagado':
-        return <CheckCircle className="w-4 h-4 text-green-500" />
+        return <CheckCircle className="w-4 h-4 text-green-600" />
       case 'Vencido':
-        return <AlertTriangle className="w-4 h-4 text-red-500" />
-      case 'Pendiente':
-        return <Clock className="w-4 h-4 text-yellow-500" />
+        return <AlertTriangle className="w-4 h-4 text-red-600" />
+      case 'Retraso':
+        return <Clock className="w-4 h-4 text-yellow-600" />
       default:
-        return <Clock className="w-4 h-4 text-gray-500" />
+        return <Receipt className="w-4 h-4 text-blue-600" />
     }
   }
 
@@ -114,90 +142,72 @@ export function PaymentsManagement() {
       key: 'id',
       label: 'ID Pago',
       sortable: true,
-      render: (value: string) => <span className="font-mono">{value}</span>
+      render: (value) => (
+        <span className="font-mono font-medium">{value}</span>
+      )
+    },
+    {
+      key: 'loanId',
+      label: 'Préstamo',
+      sortable: true,
+      render: (value) => (
+        <span className="font-mono text-sm">{value}</span>
+      )
     },
     {
       key: 'clientName',
       label: 'Cliente',
       sortable: true,
-      render: (value: string, row: any) => (
-        <div>
-          <p className="font-medium">{value}</p>
-          <p className="text-xs text-muted-foreground">{row.loanId}</p>
-        </div>
+      render: (value) => (
+        <div className="font-medium">{value}</div>
       )
     },
     {
       key: 'amount',
       label: 'Monto',
       sortable: true,
-      render: (value: number, row: any) => (
-        <div>
-          <p className="font-medium">{formatCurrency(value)}</p>
-          {row.penalty > 0 && (
-            <p className="text-xs text-red-600">+ {formatCurrency(row.penalty)} mora</p>
-          )}
-        </div>
+      render: (value) => (
+        <span className="font-medium">{formatCurrency(value)}</span>
       )
     },
     {
       key: 'dueDate',
-      label: 'Fecha Venc.',
+      label: 'Fecha Vencimiento',
       sortable: true,
-      className: 'hidden md:table-cell',
-      render: (value: string) => new Date(value).toLocaleDateString('es-CO')
-    },
-    {
-      key: 'paymentDate',
-      label: 'Fecha Pago',
-      className: 'hidden lg:table-cell',
-      render: (value: string | null) => 
-        value ? new Date(value).toLocaleDateString('es-CO') : '-'
+      render: (value) => (
+        <div className="text-sm">{value}</div>
+      )
     },
     {
       key: 'status',
       label: 'Estado',
-      filterable: true,
-      render: (value: string, row: any) => (
+      sortable: true,
+      render: (value, row) => (
         <div className="flex items-center gap-2">
           {getStatusIcon(value)}
           {getStatusBadge(value)}
-          {row.lateDays > 0 && value !== 'Pagado' && (
+          {row.lateDays > 0 && (
             <span className="text-xs text-red-600">
-              {row.lateDays}d retraso
+              +{row.lateDays}d
             </span>
           )}
         </div>
       )
     },
     {
-      key: 'paymentMethod',
+      key: 'method',
       label: 'Método',
-      className: 'hidden xl:table-cell',
-      render: (value: string | null) => value || '-'
-    },
-    {
-      key: 'reference',
-      label: 'Referencia',
-      className: 'hidden xl:table-cell',
-      render: (value: string | null) => (
-        <span className="font-mono text-xs">{value || '-'}</span>
+      sortable: true,
+      render: (value) => (
+        <span className="text-sm">{value || 'N/A'}</span>
       )
     },
     {
-      key: 'actions',
-      label: 'Acciones',
-      render: (value: any, row: any) => (
-        <div className="flex gap-1">
-          <Button size="sm" variant="outline" onClick={() => setSelectedPayment(row)}>
-            <Eye className="w-3 h-3" />
-          </Button>
-          {row.status !== 'Pagado' && (
-            <Button size="sm" variant="outline">
-              <Edit className="w-3 h-3" />
-            </Button>
-          )}
-        </div>
+      key: 'paymentDate',
+      label: 'Fecha Pago',
+      sortable: true,
+      render: (value) => (
+        <span className="text-sm">{value || 'Pendiente'}</span>
       )
     }
   ]
@@ -207,359 +217,390 @@ export function PaymentsManagement() {
       key: 'status',
       label: 'Estado',
       options: [
-        { value: 'Pagado', label: 'Pagados' },
-        { value: 'Pendiente', label: 'Pendientes' },
-        { value: 'Vencido', label: 'Vencidos' },
-        { value: 'Parcial', label: 'Parciales' }
+        { value: 'Pagado', label: 'Pagado' },
+        { value: 'Vencido', label: 'Vencido' },
+        { value: 'Pendiente', label: 'Pendiente' },
+        { value: 'Programado', label: 'Programado' },
+        { value: 'Retraso', label: 'Retraso' }
       ]
     },
     {
-      key: 'paymentMethod',
+      key: 'method',
       label: 'Método',
       options: [
         { value: 'Transferencia', label: 'Transferencia' },
         { value: 'Efectivo', label: 'Efectivo' },
-        { value: 'Tarjeta', label: 'Tarjeta' },
         { value: 'Cheque', label: 'Cheque' }
       ]
     }
   ]
 
+  const handleRowClick = (payment) => {
+    setSelectedPayment(payment)
+  }
+
+  const stats = {
+    totalPayments: mockPayments.length,
+    paidPayments: mockPayments.filter(p => p.status === 'Pagado').length,
+    overduePayments: mockPayments.filter(p => p.status === 'Vencido').length,
+    latePayments: mockPayments.filter(p => p.status === 'Retraso').length,
+    totalCollected: mockPayments
+      .filter(p => p.status === 'Pagado')
+      .reduce((sum, p) => sum + p.amount, 0),
+    pendingAmount: mockPayments
+      .filter(p => p.status !== 'Pagado')
+      .reduce((sum, p) => sum + p.amount, 0)
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
           <h1>Pagos y Cobranzas</h1>
           <p className="text-muted-foreground">
-            Gestiona pagos, registra cobros y controla la morosidad
+            Gestiona los pagos, cobranzas y seguimiento de la cartera
           </p>
         </div>
-        <Dialog open={isNewPaymentDialogOpen} onOpenChange={setIsNewPaymentDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="w-full sm:w-auto">
-              <Plus className="w-4 h-4 mr-2" />
-              Registrar Pago
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Registrar Nuevo Pago</DialogTitle>
-            </DialogHeader>
-            <NewPaymentForm onClose={() => setIsNewPaymentDialogOpen(false)} />
-          </DialogContent>
-        </Dialog>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setShowCollectionModal(true)}>
+            <Phone className="w-4 h-4 mr-2" />
+            Gestión de Cobro
+          </Button>
+          <Button onClick={() => setShowPaymentForm(true)}>
+            <Plus className="w-4 h-4 mr-2" />
+            Registrar Pago
+          </Button>
+        </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="p-4 hover:shadow-md transition-shadow">
-          <div className="text-center">
-            <p className="text-2xl font-semibold text-green-600">{formatCurrency(125600000)}</p>
-            <p className="text-sm text-muted-foreground">Recaudado Hoy</p>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
+        <Card className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Total Pagos</p>
+              <p className="text-2xl font-semibold text-blue-600">{stats.totalPayments}</p>
+            </div>
+            <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
+              <Receipt className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            </div>
           </div>
         </Card>
-        <Card className="p-4 hover:shadow-md transition-shadow">
-          <div className="text-center">
-            <p className="text-2xl font-semibold text-blue-600">{formatCurrency(892000000)}</p>
-            <p className="text-sm text-muted-foreground">Recaudado Mes</p>
+
+        <Card className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Pagos Realizados</p>
+              <p className="text-2xl font-semibold text-green-600">{stats.paidPayments}</p>
+            </div>
+            <div className="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
+              <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+            </div>
           </div>
         </Card>
-        <Card className="p-4 hover:shadow-md transition-shadow">
-          <div className="text-center">
-            <p className="text-2xl font-semibold text-red-600">156</p>
-            <p className="text-sm text-muted-foreground">Pagos Vencidos</p>
+
+        <Card className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Pagos Vencidos</p>
+              <p className="text-2xl font-semibold text-red-600">{stats.overduePayments}</p>
+            </div>
+            <div className="p-3 bg-red-100 dark:bg-red-900 rounded-lg">
+              <AlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
+            </div>
           </div>
         </Card>
-        <Card className="p-4 hover:shadow-md transition-shadow">
-          <div className="text-center">
-            <p className="text-2xl font-semibold text-yellow-600">{formatCurrency(245800000)}</p>
-            <p className="text-sm text-muted-foreground">Por Vencer</p>
+
+        <Card className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">En Retraso</p>
+              <p className="text-2xl font-semibold text-yellow-600">{stats.latePayments}</p>
+            </div>
+            <div className="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+              <Clock className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Total Recaudado</p>
+              <p className="text-xl font-semibold text-purple-600">{formatCurrency(stats.totalCollected)}</p>
+            </div>
+            <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
+              <DollarSign className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Monto Pendiente</p>
+              <p className="text-xl font-semibold text-orange-600">{formatCurrency(stats.pendingAmount)}</p>
+            </div>
+            <div className="p-3 bg-orange-100 dark:bg-orange-900 rounded-lg">
+              <TrendingUp className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+            </div>
           </div>
         </Card>
       </div>
 
-      {/* Payments Table */}
+      {/* Data Table */}
       <DataTable
         data={mockPayments}
         columns={columns}
         filters={filters}
-        onRowClick={(row) => setSelectedPayment(row)}
-        itemsPerPageOptions={[10, 25, 50, 100]}
-        defaultItemsPerPage={10}
+        onRowClick={handleRowClick}
+        searchable={true}
+        filterable={true}
+        exportable={true}
       />
 
-      {/* Payment Detail Dialog */}
+      {/* Payment Detail Modal */}
       {selectedPayment && (
-        <Dialog open={!!selectedPayment} onOpenChange={() => setSelectedPayment(null)}>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Detalle del Pago: {selectedPayment.id}</DialogTitle>
-            </DialogHeader>
-            <PaymentDetailView payment={selectedPayment} />
-          </DialogContent>
-        </Dialog>
-      )}
-    </div>
-  )
-}
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-2xl m-4 max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3>Detalles del Pago {selectedPayment.id}</h3>
+                <Button variant="ghost" onClick={() => setSelectedPayment(null)}>
+                  ×
+                </Button>
+              </div>
 
-function NewPaymentForm({ onClose }: { onClose: () => void }) {
-  const { currency } = useApp()
-  const [paymentData, setPaymentData] = useState({
-    clientId: '',
-    loanId: '',
-    amount: '',
-    paymentMethod: 'Transferencia',
-    reference: '',
-    paymentDate: new Date().toISOString().split('T')[0],
-    notes: ''
-  })
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Payment Info */}
+                <Card className="p-4">
+                  <h4 className="mb-4">Información del Pago</h4>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">ID Préstamo:</span>
+                      <span className="font-mono font-medium">{selectedPayment.loanId}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Cliente:</span>
+                      <span className="font-medium">{selectedPayment.clientName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Monto Total:</span>
+                      <span className="font-medium">{formatCurrency(selectedPayment.amount)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Capital:</span>
+                      <span className="font-medium">{formatCurrency(selectedPayment.principalAmount)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Interés:</span>
+                      <span className="font-medium">{formatCurrency(selectedPayment.interestAmount)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Estado:</span>
+                      <div className="flex items-center gap-2">
+                        {getStatusIcon(selectedPayment.status)}
+                        {getStatusBadge(selectedPayment.status)}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount)
-  }
+                {/* Dates and Status */}
+                <Card className="p-4">
+                  <h4 className="mb-4">Fechas y Estado</h4>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Fecha Vencimiento:</span>
+                      <span className="font-medium">{selectedPayment.dueDate}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Fecha de Pago:</span>
+                      <span className="font-medium">{selectedPayment.paymentDate || 'Pendiente'}</span>
+                    </div>
+                    {selectedPayment.lateDays > 0 && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Días de Retraso:</span>
+                        <span className="font-medium text-red-600">{selectedPayment.lateDays} días</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Método:</span>
+                      <span className="font-medium">{selectedPayment.method || 'N/A'}</span>
+                    </div>
+                    {selectedPayment.reference && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Referencia:</span>
+                        <span className="font-mono text-sm">{selectedPayment.reference}</span>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              </div>
 
-  return (
-    <div className="space-y-6 max-h-[70vh] overflow-y-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="client">Cliente *</Label>
-          <Select
-            value={paymentData.clientId}
-            onValueChange={(value) => setPaymentData({ ...paymentData, clientId: value })}
-          >
-            <option value="">Seleccionar cliente</option>
-            {mockClients.map((client) => (
-              <option key={client.id} value={client.id}>
-                {client.name} - {client.id}
-              </option>
-            ))}
-          </Select>
+              <div className="flex gap-2 pt-6">
+                {selectedPayment.status !== 'Pagado' && (
+                  <Button>Registrar Pago</Button>
+                )}
+                <Button variant="outline">Enviar Recordatorio</Button>
+                <Button variant="outline">Ver Historial</Button>
+              </div>
+            </div>
+          </Card>
         </div>
-        <div>
-          <Label htmlFor="loan">Préstamo *</Label>
-          <Select
-            value={paymentData.loanId}
-            onValueChange={(value) => setPaymentData({ ...paymentData, loanId: value })}
-            disabled={!paymentData.clientId}
-          >
-            <option value="">Seleccionar préstamo</option>
-            <option value="CR-001">CR-001 - {formatCurrency(50000000)}</option>
-            <option value="CR-002">CR-002 - {formatCurrency(25000000)}</option>
-            <option value="CR-003">CR-003 - {formatCurrency(75000000)}</option>
-          </Select>
-          {!paymentData.clientId && (
-            <p className="text-xs text-muted-foreground mt-1">
-              Primero selecciona un cliente
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="amount">Monto del Pago ({currency}) *</Label>
-          <div className="relative">
-            <DollarSign className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-            <Input
-              id="amount"
-              type="number"
-              value={paymentData.amount}
-              onChange={(e) => setPaymentData({ ...paymentData, amount: e.target.value })}
-              placeholder="0"
-              className="pl-10"
-            />
-          </div>
-        </div>
-        <div>
-          <Label htmlFor="paymentDate">Fecha de Pago *</Label>
-          <div className="relative">
-            <Calendar className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-            <Input
-              id="paymentDate"
-              type="date"
-              value={paymentData.paymentDate}
-              onChange={(e) => setPaymentData({ ...paymentData, paymentDate: e.target.value })}
-              className="pl-10"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label htmlFor="paymentMethod">Método de Pago *</Label>
-          <Select
-            value={paymentData.paymentMethod}
-            onValueChange={(value) => setPaymentData({ ...paymentData, paymentMethod: value })}
-          >
-            <option value="Transferencia">Transferencia Bancaria</option>
-            <option value="Efectivo">Efectivo</option>
-            <option value="Tarjeta">Tarjeta de Débito/Crédito</option>
-            <option value="Cheque">Cheque</option>
-            <option value="PSE">PSE</option>
-          </Select>
-        </div>
-        <div>
-          <Label htmlFor="reference">Referencia/Comprobante</Label>
-          <Input
-            id="reference"
-            value={paymentData.reference}
-            onChange={(e) => setPaymentData({ ...paymentData, reference: e.target.value })}
-            placeholder="Número de referencia o comprobante"
-          />
-        </div>
-      </div>
-
-      <div>
-        <Label htmlFor="notes">Notas Adicionales</Label>
-        <Input
-          id="notes"
-          value={paymentData.notes}
-          onChange={(e) => setPaymentData({ ...paymentData, notes: e.target.value })}
-          placeholder="Observaciones del pago"
-        />
-      </div>
-
-      {paymentData.loanId && paymentData.amount && (
-        <Card className="p-4 bg-muted/30">
-          <h4 className="mb-2">Resumen del Pago</h4>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div><strong>Cliente:</strong> Cliente seleccionado</div>
-            <div><strong>Préstamo:</strong> {paymentData.loanId}</div>
-            <div><strong>Monto:</strong> {paymentData.amount ? formatCurrency(parseFloat(paymentData.amount)) : formatCurrency(0)}</div>
-            <div><strong>Método:</strong> {paymentData.paymentMethod}</div>
-          </div>
-        </Card>
       )}
 
-      <div className="flex justify-end gap-3 pt-4 border-t">
-        <Button variant="outline" onClick={onClose}>
-          Cancelar
-        </Button>
-        <Button disabled={!paymentData.clientId || !paymentData.loanId || !paymentData.amount}>
-          Registrar Pago
-        </Button>
-      </div>
-    </div>
-  )
-}
-
-function PaymentDetailView({ payment }: { payment: any }) {
-  const { currency } = useApp()
-  
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount)
-  }
-
-  return (
-    <div className="space-y-6 max-h-[70vh] overflow-y-auto">
-      {/* Payment Header */}
-      <div className="flex items-center justify-between p-6 bg-muted/30 rounded-lg">
-        <div>
-          <h3>Pago {payment.id}</h3>
-          <p className="text-muted-foreground">{payment.clientName}</p>
-          <p className="text-sm text-muted-foreground">Préstamo: {payment.loanId}</p>
-        </div>
-        <div className="text-right">
-          <p className="text-2xl font-semibold">{formatCurrency(payment.amount)}</p>
-          <Badge variant={payment.status === 'Pagado' ? 'default' : 'destructive'}>
-            {payment.status}
-          </Badge>
-        </div>
-      </div>
-
-      {/* Payment Details */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-4">
-          <div>
-            <Label className="text-muted-foreground">Fecha de Vencimiento</Label>
-            <p className="font-medium">{new Date(payment.dueDate).toLocaleDateString('es-CO')}</p>
-          </div>
-          
-          {payment.paymentDate && (
-            <div>
-              <Label className="text-muted-foreground">Fecha de Pago</Label>
-              <p className="font-medium">{new Date(payment.paymentDate).toLocaleDateString('es-CO')}</p>
+      {/* Register Payment Form */}
+      {showPaymentForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-md m-4">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3>Registrar Pago</h3>
+                <Button variant="ghost" onClick={() => setShowPaymentForm(false)}>
+                  ×
+                </Button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="payment-loan">Préstamo</Label>
+                  <Select id="payment-loan">
+                    <option value="">Seleccionar préstamo</option>
+                    <option value="PR-001">PR-001 - María García</option>
+                    <option value="PR-002">PR-002 - Carlos Rodríguez</option>
+                    <option value="PR-003">PR-003 - Ana Martínez</option>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="payment-amount">Monto</Label>
+                  <Input id="payment-amount" type="number" placeholder="450000" />
+                </div>
+                <div>
+                  <Label htmlFor="payment-method">Método de Pago</Label>
+                  <Select id="payment-method">
+                    <option value="">Seleccionar método</option>
+                    <option value="transferencia">Transferencia</option>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="cheque">Cheque</option>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="payment-date">Fecha de Pago</Label>
+                  <Input id="payment-date" type="date" />
+                </div>
+                <div>
+                  <Label htmlFor="payment-reference">Referencia</Label>
+                  <Input id="payment-reference" placeholder="Número de transacción" />
+                </div>
+                
+                <div className="flex gap-2 pt-4">
+                  <Button className="flex-1">
+                    Registrar Pago
+                  </Button>
+                  <Button variant="outline" onClick={() => setShowPaymentForm(false)}>
+                    Cancelar
+                  </Button>
+                </div>
+              </div>
             </div>
-          )}
-
-          <div>
-            <Label className="text-muted-foreground">Método de Pago</Label>
-            <p className="font-medium">{payment.paymentMethod || 'No especificado'}</p>
-          </div>
+          </Card>
         </div>
+      )}
 
-        <div className="space-y-4">
-          <div>
-            <Label className="text-muted-foreground">Referencia</Label>
-            <p className="font-medium font-mono">{payment.reference || 'No disponible'}</p>
-          </div>
+      {/* Collection Management Modal */}
+      {showCollectionModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-3xl m-4 max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3>Gestión de Cobranza</h3>
+                <Button variant="ghost" onClick={() => setShowCollectionModal(false)}>
+                  ×
+                </Button>
+              </div>
 
-          {payment.lateDays > 0 && (
-            <div>
-              <Label className="text-muted-foreground">Días de Retraso</Label>
-              <p className="font-medium text-red-600">{payment.lateDays} días</p>
+              <div className="space-y-6">
+                {/* Overdue Payments */}
+                <div>
+                  <h4 className="mb-4">Pagos Vencidos Urgentes</h4>
+                  <div className="space-y-3">
+                    {mockPayments.filter(p => p.status === 'Vencido').map((payment) => (
+                      <Card key={payment.id} className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <AlertTriangle className="w-6 h-6 text-red-600" />
+                            <div>
+                              <p className="font-medium">{payment.clientName}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {payment.loanId} • Vencido desde {payment.dueDate}
+                              </p>
+                              <p className="text-sm font-medium text-red-600">
+                                {payment.lateDays} días de retraso
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-medium text-red-600">{formatCurrency(payment.amount)}</p>
+                            <div className="flex gap-2 mt-2">
+                              <Button size="sm" variant="outline">
+                                <Phone className="w-3 h-3 mr-1" />
+                                Llamar
+                              </Button>
+                              <Button size="sm" variant="outline">
+                                <Mail className="w-3 h-3 mr-1" />
+                                Email
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Late Payments */}
+                <div>
+                  <h4 className="mb-4">Pagos en Retraso</h4>
+                  <div className="space-y-3">
+                    {mockPayments.filter(p => p.status === 'Retraso').map((payment) => (
+                      <Card key={payment.id} className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <Clock className="w-6 h-6 text-yellow-600" />
+                            <div>
+                              <p className="font-medium">{payment.clientName}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {payment.loanId} • Vence: {payment.dueDate}
+                              </p>
+                              <p className="text-sm font-medium text-yellow-600">
+                                {payment.lateDays} días de retraso
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-medium text-yellow-600">{formatCurrency(payment.amount)}</p>
+                            <div className="flex gap-2 mt-2">
+                              <Button size="sm" variant="outline">
+                                <Phone className="w-3 h-3 mr-1" />
+                                Llamar
+                              </Button>
+                              <Button size="sm" variant="outline">
+                                Recordatorio
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
-
-          {payment.penalty > 0 && (
-            <div>
-              <Label className="text-muted-foreground">Penalidad por Mora</Label>
-              <p className="font-medium text-red-600">{formatCurrency(payment.penalty)}</p>
-            </div>
-          )}
+          </Card>
         </div>
-      </div>
-
-      {/* Amount Breakdown */}
-      <Card className="p-4">
-        <h4 className="mb-4">Desglose del Pago</h4>
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <span>Monto de la Cuota:</span>
-            <span className="font-medium">{formatCurrency(payment.amount - (payment.penalty || 0))}</span>
-          </div>
-          {payment.penalty > 0 && (
-            <div className="flex justify-between">
-              <span>Penalidad por Mora:</span>
-              <span className="font-medium text-red-600">{formatCurrency(payment.penalty)}</span>
-            </div>
-          )}
-          <div className="border-t pt-2 flex justify-between font-semibold">
-            <span>Total Pagado:</span>
-            <span>{formatCurrency(payment.amount)}</span>
-          </div>
-        </div>
-      </Card>
-
-      {/* Actions */}
-      <div className="flex justify-end gap-3 pt-4 border-t">
-        {payment.status !== 'Pagado' && (
-          <>
-            <Button variant="outline">
-              Marcar como Pagado
-            </Button>
-            <Button>
-              Registrar Pago Parcial
-            </Button>
-          </>
-        )}
-        <Button variant="outline">
-          Imprimir Recibo
-        </Button>
-      </div>
+      )}
     </div>
   )
 }
