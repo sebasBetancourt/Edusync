@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import type { SidebarProps } from '@/components/ui/sidebar'
+import type { SidebarProps } from './ui/sidebar'
 
 import {
   BookOpen,
-  Bot,
-  Command,
-  Frame,
+  CalendarDays,
+  LibraryBig,
+  Users,
   LifeBuoy,
-  Map,
-  PieChart,
+  IdCard,
+  GraduationCap,
   Send,
-  Settings2,
-  SquareTerminal,
+  ClipboardMinus,
+  CreditCard,
 } from "lucide-vue-next"
-import NavMain from '@/components/NavMain.vue'
-import NavProjects from '@/components/NavProjects.vue'
-import NavSecondary from '@/components/NavSecondary.vue'
-import NavUser from '@/components/NavUser.vue'
+import NavMain from './NavMain.vue'
+import NavProjects from './NavProjects.vue'
+import NavSecondary from './NavSecondary.vue'
+import NavUser from './NavUser.vue'
 import {
   Sidebar,
   SidebarContent,
@@ -26,7 +26,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 
-} from '@/components/ui/sidebar'
+} from './ui/sidebar'
 
 const props = withDefaults(defineProps<SidebarProps>(), {
   variant: "inset",
@@ -40,86 +40,98 @@ const data = {
   },
   navMain: [
     {
-      title: "Playground",
+      title: "Materias",
       url: "#",
-      icon: SquareTerminal,
+      icon: LibraryBig,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "Matematicas",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "Ingles",
           url: "#",
         },
         {
-          title: "Settings",
+          title: "Quimica",
+          url: "#",
+        },
+        {
+          title: "Español",
+          url: "#",
+        },
+        {
+          title: "Ciencias Sociales",
+          url: "#",
+        },
+        {
+          title: "Religion",
           url: "#",
         },
       ],
     },
     {
-      title: "Models",
+      title: "Calendario",
       url: "#",
-      icon: Bot,
+      icon: CalendarDays,
       items: [
         {
-          title: "Genesis",
+          title: "Ver mi Calendario",
           url: "#",
         },
         {
-          title: "Explorer",
+          title: "Eventos",
           url: "#",
         },
         {
-          title: "Quantum",
+          title: "Citaciones",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Notas",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "Ver Mis Notas",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "Tareas",
           url: "#",
         },
         {
-          title: "Tutorials",
+          title: "Quizzes",
           url: "#",
         },
         {
-          title: "Changelog",
+          title: "Talleres",
+          url: "#",
+        },
+        {
+          title: "Examenes",
           url: "#",
         },
       ],
     },
     {
-      title: "Settings",
+      title: "Reportes",
       url: "#",
-      icon: Settings2,
+      icon: ClipboardMinus,
       items: [
         {
-          title: "General",
+          title: "Reporte de Notas",
           url: "#",
         },
         {
-          title: "Team",
+          title: "Reporte de Pagos",
           url: "#",
         },
         {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "Reporte de Comportamiento",
           url: "#",
         },
       ],
@@ -127,31 +139,36 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Support",
+      title: "Soporte",
       url: "#",
       icon: LifeBuoy,
     },
     {
-      title: "Feedback",
+      title: "Comentarios",
       url: "#",
       icon: Send,
     },
   ],
   projects: [
     {
-      name: "Design Engineering",
+      name: "Curso",
       url: "#",
-      icon: Frame,
+      icon: Users,
     },
     {
-      name: "Sales & Marketing",
+      name: "Profesores",
       url: "#",
-      icon: PieChart,
+      icon: GraduationCap,
     },
     {
-      name: "Travel",
+      name: "Asistencia",
       url: "#",
-      icon: Map,
+      icon: IdCard,
+    },
+    {
+      name: "Pagos",
+      url: "#",
+      icon: CreditCard,
     },
   ],
 }
@@ -169,7 +186,7 @@ const data = {
               </div>
               <div class="grid flex-1 text-left text-sm leading-tight">
                 <span class="truncate font-medium">EduSync</span>
-                <span class="truncate text-xs">CampusLands</span>
+                <span class="truncate text-xs">Estudiante</span>
               </div>
             </a>
           </SidebarMenuButton>

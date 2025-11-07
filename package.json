@@ -27,6 +27,11 @@
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
+    "@iconify-json/radix-icons": "^1.2.5",
+    "@iconify/vue": "^5.0.0",
+    "@nuxt/types": "^2.18.1",
+    "@nuxtjs/color-mode": "^3.5.2",
+    "@types/node": "^24.10.0",
     "shadcn-vue": "^2.3.2",
     "vite-tsconfig-paths": "^5.1.4"
   }

@@ -1,27 +1,29 @@
- {
-  // https://nuxt.com/docs/guide/concepts/typescript
+{
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"],
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "#imports": ["./.nuxt/imports.d.ts"]
     },
-    "typeRoots": ["./types", "./node_modules/@types"]
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "types": ["@nuxt/types", "@nuxtjs/color-mode"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "composite": true
   },
-  "include": ["types/**/*.d.ts", "**/*.ts", "**/*.vue", "**/*.js"],
-  "files": [],
-  "references": [
-    {
-      "path": "./.nuxt/tsconfig.app.json"
-    },
-    {
-      "path": "./.nuxt/tsconfig.server.json"
-    },
-    {
-      "path": "./.nuxt/tsconfig.shared.json"
-    },
-    {
-      "path": "./.nuxt/tsconfig.node.json"
-    }
+  "include": [
+    "./types/**/*.d.ts",
+    "**/*.ts",
+    "**/*.vue",
+    "**/*.js",
+    "./.nuxt/imports.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }

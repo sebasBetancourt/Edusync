@@ -5,7 +5,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible'
+} from './ui/collapsible'
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,7 +16,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from '@/components/ui/sidebar'
+} from './ui/sidebar'
 
 defineProps<{
   items: {
@@ -34,9 +34,9 @@ defineProps<{
 
 <template>
   <SidebarGroup>
-    <SidebarGroupLabel>Platform</SidebarGroupLabel>
+    <SidebarGroupLabel>Formacion</SidebarGroupLabel>
     <SidebarMenu>
-      <Collapsible v-for="item in items" :key="item.title" as-child :default-open="item.isActive">
+      <Collapsible v-for="item in items" :key="item.title" as-child>
         <SidebarMenuItem>
           <SidebarMenuButton as-child :tooltip="item.title">
             <a :href="item.url">

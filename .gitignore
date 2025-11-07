@@ -23,11 +23,9 @@ logs
 .env.*
 !.env.example
 
-# Ignorar carpeta de componentes UI generados por shadcn
-app/components/ui/
-
-# Ignorar utilidades de shadcn
-app/lib/utils.ts
+# (Removed) Previously ignored shadcn-generated UI components and utils
+# app/components/ui/
+# app/lib/utils.ts
 
 # Archivos de compilación y dependencias
 node_modules/

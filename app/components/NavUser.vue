@@ -12,7 +12,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@/components/ui/avatar'
+} from './ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,13 +21,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from './ui/dropdown-menu'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@/components/ui/sidebar'
+} from './ui/sidebar'
 
 const props = defineProps<{
   user: {
@@ -85,29 +85,26 @@ const { isMobile } = useSidebar()
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <Sparkles />
-              Upgrade to Pro
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
               <BadgeCheck />
-              Account
+              Cuenta
             </DropdownMenuItem>
             <DropdownMenuItem>
               <CreditCard />
-              Billing
+              Pagos
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Bell />
-              Notifications
+              Notificaciones
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <BadgeCheck />
+              Ajustes
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <LogOut />
-            Log out
+            <router-link to="/login" class="w-full h-full"> Salir </router-link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
