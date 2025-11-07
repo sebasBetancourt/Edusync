@@ -1,5 +1,14 @@
-{
+ {
   // https://nuxt.com/docs/guide/concepts/typescript
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./*"]
+    },
+    "typeRoots": ["./types", "./node_modules/@types"]
+  },
+  "include": ["types/**/*.d.ts", "**/*.ts", "**/*.vue", "**/*.js"],
   "files": [],
   "references": [
     {
