@@ -72,4 +72,15 @@ yarn preview
 bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## ⚙️ Instalación del UI (shadcn-vue)
+
+Este proyecto usa shadcn-vue para los componentes UI (botones, formularios, tarjetas, etc).
+
+Por razones de tamaño, los componentes no se incluyen en el repositorio.
+Para instalarlos después de clonar el proyecto, ejecuta:
+
+```npm install```
+```npm run setup:ui```
+
+
+Esto configurará shadcn-vue y descargará los componentes necesarios (button, input, label, card, etc).

@@ -14,6 +14,15 @@ import RegisterPage from './RegisterPage.vue'
   
 
 const showRegister = ref(false)
+
+// ✅ Emite un evento hacia el padre (App.vue)
+const emit = defineEmits(['login-success'])
+
+function handleLogin() {
+  // Aquí podrías validar usuario y contraseña
+  // Pero por ahora solo emitimos el evento:
+  emit('login-success')
+}
 </script>
 
 <template>
@@ -51,8 +60,8 @@ const showRegister = ref(false)
             </div>
             <Input id="password" type="password" required />
           </div>
-          <Button type="submit" class="w-full">
-            Entrar
+          <Button type="submit" class="w-full" @click="handleLogin">
+            <router-link to="/panel" class="w-full h-full"> Entrar </router-link>
           </Button>
           <Button variant="outline" class="w-full">
             Entrar con Google

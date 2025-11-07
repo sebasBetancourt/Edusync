@@ -22,3 +22,24 @@ logs
 .env
 .env.*
 !.env.example
+
+# Ignorar carpeta de componentes UI generados por shadcn
+app/components/ui/
+
+# Ignorar utilidades de shadcn
+app/lib/utils.ts
+
+# Archivos de compilación y dependencias
+node_modules/
+dist/
+.nuxt/
+.output/
+*.log
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Entornos y variables
+.env
+.env.*
