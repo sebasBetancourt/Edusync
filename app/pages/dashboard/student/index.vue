@@ -15,7 +15,10 @@ import {
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../../../components/ui/card'
 
 // @ts-expect-error definePageMeta es global de Nuxt
-definePageMeta({ layout: 'dashboard' })
+definePageMeta({
+  layout: 'dashboard',
+  breadcrumb: 'Panel Estudiante'
+})
 
 
 const dataCard = ref({

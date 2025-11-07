@@ -1,7 +1,24 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { watchEffect } from 'vue'
 import AppSidebar from '@/components/AppSidebar.vue'
 import { School, Phone } from "lucide-vue-next"
 import Theme from '@/components/Theme.vue'
+
+
+
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+// Estado reactivo para el título del breadcrumb
+const pageTitle = ref<string | Record<string, any>>("")
+
+// 🧠 Cuando la ruta cambia, actualizamos el título
+watchEffect(() => {
+  // Si la página tiene un meta personalizado, úsalo
+  pageTitle.value = route.meta?.breadcrumb || route.name || 'Página'
+})
 </script>
 
 <template>
@@ -15,12 +32,12 @@ import Theme from '@/components/Theme.vue'
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem class="hidden md:block">
-                <BreadcrumbLink href="#">Inicio</BreadcrumbLink>
+                <BreadcrumbLink href="/dashboard/student">Inicio</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator class="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage class="flex items-center gap-2 text-muted-foreground font-normal">
-                  Dashboard Estudiante <School class="w-5" />
+                  {{ pageTitle }} <School class="w-5" />
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>

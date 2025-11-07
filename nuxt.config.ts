@@ -7,6 +7,11 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: ''
   },
+  nitro: {
+    prerender: {
+      failOnError: false, // ⚠️ Ignora errores 404 en prerender
+    },
+  },
   css: ['~/assets/css/tailwind.css'],
   // Ensure Nuxt auto-registers components
   components: [

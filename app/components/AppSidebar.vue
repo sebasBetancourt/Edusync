@@ -157,7 +157,7 @@ const data = {
   projects: [
     {
       name: "Curso",
-      url: "/materias",
+      url: "/dashboard/student/cursos",
       icon: Users,
     },
     {
@@ -185,7 +185,7 @@ const data = {
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton size="lg" as-child>
-            <a href="#">
+            <NuxtLink to="/dashboard/student">
               <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <img src="https://img.freepik.com/vector-gratis/diseno-logotipo-escuela-secundaria-degradado_23-2149626932.jpg?semt=ais_hybrid&w=740&q=80" class="rounded-lg" alt="">
               </div>
@@ -193,7 +193,7 @@ const data = {
                 <span class="truncate font-medium">EduSync</span>
                 <span class="truncate text-xs">Estudiante</span>
               </div>
-            </a>
+            </NuxtLink>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

@@ -52,7 +52,7 @@ function handleLogin() {
             <div class="flex items-center">
               <Label for="password">Contraseña</Label>
               <a
-                href="/forgot-password"
+                href="#"
                 class="ml-auto inline-block text-sm underline"
               >
                 ¿Olvidaste tu contraseña?
