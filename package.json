@@ -11,9 +11,13 @@
     "setup:ui": "npx shadcn-vue@latest init && npx shadcn-vue@latest add button input label card Sidebar08 "
   },
   "dependencies": {
+    "@number-flow/vue": "^0.4.8",
     "@nuxtjs/tailwindcss": "^7.0.0-beta.1",
     "@tailwindcss/vite": "^4.1.17",
+    "@unovis/ts": "^1.6.1",
+    "@unovis/vue": "^1.6.1",
     "@vueuse/core": "^14.0.0",
+    "apexcharts": "^5.3.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.552.0",

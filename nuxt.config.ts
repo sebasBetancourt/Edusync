@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from '@tailwindcss/vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -22,6 +23,10 @@ export default defineNuxtConfig({
       path: '~/app/components',
       pathPrefix: false,
     },
+    {
+      path: '~/app/components/ui',
+      pathPrefix: false,
+    }
   ],
   shadcn: {
     /**
