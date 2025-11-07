@@ -1,30 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from '@tailwindcss/vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@nuxtjs/color-mode'],
   colorMode: {
     classSuffix: ''
   },
   css: ['~/assets/css/tailwind.css'],
-  vite: {
-    plugins: [
-      tsconfigPaths(),
-      tailwindcss(),
-    ],
-  },
-  // Ensure Nuxt auto-registers components placed under `app/components`
+  // Ensure Nuxt auto-registers components
   components: [
     {
-      path: '~/app/components',
-      pathPrefix: false,
-    },
-    {
-      path: '~/app/components/ui',
+      path: '~/components',
       pathPrefix: false,
     }
   ],

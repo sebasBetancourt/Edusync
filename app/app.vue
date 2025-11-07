@@ -1,6 +1,8 @@
 <template>
   <div :class="{ 'dark': colorMode.value === 'dark' }" class="min-h-screen bg-background text-foreground">
-    <NuxtPage />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>
 

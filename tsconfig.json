@@ -7,7 +7,7 @@
       "#imports": ["./.nuxt/imports.d.ts"]
     },
     "typeRoots": ["./types", "./node_modules/@types"],
-    "types": ["@nuxt/types", "@nuxtjs/color-mode"],
+    "types": ["@types/node", "@nuxt/types", "@nuxtjs/color-mode", "@nuxt/schema"],
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",

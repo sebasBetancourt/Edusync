@@ -61,7 +61,7 @@ function handleLogin() {
             <Input id="password" type="password" required />
           </div>
           <Button type="submit" class="w-full" @click="handleLogin">
-            <router-link to="/panel" class="w-full h-full"> Entrar </router-link>
+            <router-link to="/dashboard/student" class="w-full h-full"> Entrar </router-link>
           </Button>
           <Button variant="outline" class="w-full">
             Entrar con Google

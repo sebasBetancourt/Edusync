@@ -1,28 +1,22 @@
-<script lang="ts">
-export const description = "An inset sidebar with secondary navigation."
-export const iframeHeight = "800px"
-</script>
-
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
-import AppSidebar from '@/components/AppSidebar.vue'
-import  { 
-  School, 
-  Phone,
-  TrendingUp as TrendingUpIcon,
-  TrendingUp,
-  TrendingDown as TrendingDownIcon,
-  TrendingDown,
-  Boxes,
-  CreditCard,
-  ClipboardList,
-  NotebookPen
-
- } from "lucide-vue-next"
-import Theme from '../components/Theme.vue'
 import { useMediaQuery } from '@vueuse/core'
 import NumberFlow from '@number-flow/vue'
 import TotalVisitors from '@/components/TotalVisitors.vue'
+import { ref, onMounted, watch } from 'vue'
+import { 
+  TrendingUp, 
+  TrendingUpIcon,
+  TrendingDown, 
+  Boxes, 
+  CreditCard, 
+  ClipboardList, 
+  NotebookPen 
+} from 'lucide-vue-next'
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../../../components/ui/card'
+
+// @ts-expect-error definePageMeta es global de Nuxt
+definePageMeta({ layout: 'dashboard' })
+
 
 const dataCard = ref({
   totalRevenue: 500,
@@ -30,6 +24,8 @@ const dataCard = ref({
   activeAccount: 0,
   growthRate: 0,
 })
+
+
 
 onMounted(() => {
   dataCard.value = {
@@ -51,44 +47,11 @@ watch(isDesktop, () => {
     timeRange.value = '7d'
   }
 }, { immediate: true })
-
 </script>
 
 <template>
-  <SidebarProvider>
-    <AppSidebar />
-    <SidebarInset>
-      <header class="flex h-16 shrink-0 items-center gap-2 justify-between">
-        <div class="flex items-center gap-2 px-4">
-          <SidebarTrigger class="-ml-1" />
-          <Separator
-            orientation="vertical"
-            class="mr-2 data-[orientation=vertical]:h-4"
-          />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem class="hidden md:block">
-                <BreadcrumbLink href="#">
-                  Inicio
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator class="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage class="flex items-center gap-2 text-muted-foreground font-normal">Formacion <School class="w-5" /></BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-          
-        </div>
-
-        <div class="flex nav-options gap-3 px-4">
-          <Theme />
-          <Button variant="outline" class="bg-white"><Phone />Contacto</Button>
-        </div>
-
-      </header>
-      <main class="@container/main flex flex-1 flex-col gap-4 md:gap-8 p-4">
-         <div class="grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs md:grid-cols-2 @5xl/main:grid-cols-4">
+    <main class="@container/main flex flex-1 flex-col gap-4 md:gap-8 p-2">
+        <div class="grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs md:grid-cols-2 @4xl/main:grid-cols-4">
           <Card class="@container/card">
             <CardHeader>
               <CardDescription class="text-green-600 font-bold">Percentil Actual</CardDescription>
@@ -194,7 +157,6 @@ watch(isDesktop, () => {
           </Card>
         </div>
 
-
         <Card class="@container/card">
           <CardHeader>
             <CardTitle>Rendimiento Academico</CardTitle>
@@ -247,9 +209,5 @@ watch(isDesktop, () => {
             <TotalVisitors :time-range="timeRange" />
           </CardContent>
         </Card>
-
-
       </main>
-    </SidebarInset>
-  </SidebarProvider>
 </template>

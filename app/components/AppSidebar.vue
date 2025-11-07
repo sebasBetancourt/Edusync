@@ -28,6 +28,11 @@ import {
 
 } from './ui/sidebar'
 
+//Cambio para emitir evento al hacer click en seccion
+const emit = defineEmits(['change-section'])
+
+
+
 const props = withDefaults(defineProps<SidebarProps>(), {
   variant: "inset",
 })
@@ -152,7 +157,7 @@ const data = {
   projects: [
     {
       name: "Curso",
-      url: "#",
+      url: "/materias",
       icon: Users,
     },
     {

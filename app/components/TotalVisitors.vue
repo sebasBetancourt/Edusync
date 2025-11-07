@@ -10,7 +10,6 @@ const props = defineProps({
   },
 })
 
-// ✅ Datos de estudiante — 30 semanas
 const studentPerformance = [
   { date: '2024-01-01', promedio: 3.2, asistencia: 1 },
   { date: '2024-01-08', promedio: 3.4, asistencia: 1 },
@@ -103,7 +102,7 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
     />
   </div>
 
-  <div class="mt-4 grid grid-cols-2 gap-4 text-sm text-gray-700 dark:text-gray-200">
+  <div class="mt-7 grid grid-cols-2 gap-4 text-sm text-gray-700 dark:text-gray-200">
     <div class="bg-white/5 dark:bg-gray-800 p-4 rounded-xl shadow-sm">
       <p class="font-semibold text-blue-600 dark:text-blue-400">Promedio general</p>
       <p class="text-2xl font-bold">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card'
 
 defineProps<{
   title?: string
@@ -9,13 +9,17 @@ defineProps<{
     value: any
   }[]
 }>()
+
+const capitalizar = (str: string) =>
+  str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
+
 </script>
 
 <template>
-  <Card class="text-sm">
+  <Card class="text-sm p-0 m-[-1rem]">
     <CardHeader v-if="title" class="p-3 border-b">
       <CardTitle>
-        {{ title }}
+        {{ capitalizar(title) }}
       </CardTitle>
     </CardHeader>
     <CardContent class="p-3 min-w-[180px] flex flex-col gap-1">
@@ -31,7 +35,7 @@ defineProps<{
               />
             </svg>
           </span>
-          <span>{{ item.name }}</span>
+          <span>{{ capitalizar(item.name) }}</span>
         </div>
         <span class="font-semibold ml-4">{{ item.value }}</span>
       </div>
