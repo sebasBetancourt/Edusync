@@ -8,9 +8,10 @@ export default defineNuxtConfig({
     classSuffix: ''
   },
   nitro: {
-    prerender: {
-      failOnError: false, // ⚠️ Ignora errores 404 en prerender
-    },
+    preset: "vercel", // 👈 para que funcione el SSR en vercel
+  },
+  build: {
+    transpile: ["@headlessui/vue", "lucide-vue-next"],
   },
   css: ['~/assets/css/tailwind.css'],
   // Ensure Nuxt auto-registers components
