@@ -33,4 +33,12 @@ export default defineNuxtConfig({
      */
     componentDir: './app/components/ui'
   },
+  app: {
+    head: {
+      title: 'EduSync', // título de tu app
+      link: [
+        { rel: 'icon', type: 'image/avif', href: '/favicon.avif' }, // o .ico
+      ],
+    },
+  },
 })

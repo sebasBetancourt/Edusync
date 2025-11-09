@@ -68,8 +68,8 @@ onMounted(() => {
           <Card class="@container/card">
             <CardHeader>
               <CardDescription class="text-blue-600 font-bold">Total Estudiantes</CardDescription>
-              <CardTitle class="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl flex justify-between items-center">
-                <NumberFlow
+              <CardTitle class="text-xs font-semibold tabular-nums @[250px]/card:text-3xl flex justify-between items-center">
+                <NumberFlow class="text-2xl" :value="dataCard.totalStudents" />
                   :value="dataCard.totalStudents"
                 />
                 <Users />

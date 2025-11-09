@@ -5,7 +5,6 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
-  Sparkles,
 } from "lucide-vue-next"
 
 import {
@@ -28,6 +27,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from './ui/sidebar'
+import SettingsDialog from './SettingsDialog.vue'
+import { ref } from "vue"
+
+
 
 const props = defineProps<{
   user: {
@@ -36,6 +39,8 @@ const props = defineProps<{
     avatar: string
   }
 }>()
+
+const showSettings = ref(false)
 
 const { isMobile } = useSidebar()
 </script>
@@ -84,9 +89,9 @@ const { isMobile } = useSidebar()
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem @click="showSettings = true">
               <BadgeCheck />
-              Cuenta
+              <span>Cuenta</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <CreditCard />
@@ -110,4 +115,6 @@ const { isMobile } = useSidebar()
       </DropdownMenu>
     </SidebarMenuItem>
   </SidebarMenu>
+
+  <SettingsDialog v-model:open="showSettings" />
 </template>
