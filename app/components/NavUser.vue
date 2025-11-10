@@ -97,11 +97,11 @@ const { isMobile } = useSidebar()
               <CreditCard />
               Pagos
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem @click="showSettings = true">
               <Bell />
               Notificaciones
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem @click="showSettings = true">
               <BadgeCheck />
               Ajustes
             </DropdownMenuItem>

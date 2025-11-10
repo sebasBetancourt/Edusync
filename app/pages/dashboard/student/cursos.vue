@@ -93,8 +93,8 @@ const color = computed(() => {
         </HoverCard>
       </div>
 
-      <div class="flex items-center justify-between mb-10 pr-4">
-          <Accordion type="single" class="w-1/2" collapsible :default-value="defaultValue">
+      <div class="lg:flex items-center w-full justify-center lg:justify-between mb-10 pr-4">
+        <Accordion type="single" class="w-full md:w-150 lg:w-1/2 justify-self-center" collapsible :default-value="defaultValue">
           <AccordionItem v-for="item in accordionItems" :key="item.value" :value="item.value">
             <AccordionTrigger>{{ item.title }} <TrendingUp class="w-5 h-5 text-blue-600" /></AccordionTrigger>
             <AccordionContent class="whitespace-pre-line font-mono text-xs">
@@ -103,7 +103,7 @@ const color = computed(() => {
           </AccordionItem>
         </Accordion>
       
-        <div class="flex flex-col items-start gap-3 w-1/3 max-w-lg">
+        <div class="flex flex-col items-start gap-3 md:w-full lg:w-1/3 max-w-lg justify-self-center mt-10 md:mt-10 ">
           <div class="flex justify-between w-full items-center">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
               Promedio general del curso
@@ -144,13 +144,13 @@ const color = computed(() => {
           class="hover:shadow-xl transition rounded-2xl border"
         >
           <CardHeader>
-            <CardTitle class="text-xl font-semibold flex items-center gap-2">
+            <CardTitle class="text-m font-semibold flex items-center gap-2">
               <BookOpen class="w-5 h-5" /> {{ materia.nombre }}
             </CardTitle>
           </CardHeader>
           <CardContent class="space-y-4">
-            <p><strong>Profesor:</strong> {{ materia.profesor }}</p>
-            <p class="mt-3"><strong>Avance:</strong></p>
+            <p class="text-sm"><strong>Profesor:</strong> {{ materia.profesor }}</p>
+            <p class="mt-3 text-sm"><strong>Avance:</strong></p>
 
             <div class="relative w-full bg-gray-200 dark:bg-gray-700 h-3 rounded-full overflow-hidden shadow-inner">
               <div
