@@ -133,7 +133,7 @@ const data = {
         },
         {
           title: "Reporte de Pagos",
-          url: "#",
+          url: "/dashboard/student/reportePago",
         },
         {
           title: "Reporte de Comportamiento",
@@ -162,7 +162,7 @@ const data = {
     },
     {
       name: "Profesores",
-      url: "#",
+      url: "/dashboard/student/profesores",
       icon: GraduationCap,
     },
     {
@@ -172,7 +172,7 @@ const data = {
     },
     {
       name: "Pagos",
-      url: "#",
+      url: "/dashboard/student/pagos",
       icon: CreditCard,
     },
   ],
